@@ -4,13 +4,16 @@ public class ClickHandler : MonoBehaviour
 {
     private RoomOne roomOneScript;
     private RoomTwo roomTwoScript;
+    private RoomThree roomThreeScript;
 
     [SerializeField] private GameObject cauldronObject; // Reference to the cauldron
+    [SerializeField] private GameObject emptyBookshelfObject; // Reference to the empty bookshelf
 
     void Start()
     {
         roomOneScript = GetComponent<RoomOne>();
         roomTwoScript = GetComponent<RoomTwo>();
+        roomThreeScript = GetComponent<RoomThree>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -48,6 +51,23 @@ public class ClickHandler : MonoBehaviour
                 {
                     Debug.Log("Clicked on torch: " + clickedObject.name);
                     roomTwoScript.SelectTorch(clickedObject);
+                }
+            }
+
+            // Room Three interactions
+            if (roomThreeScript != null)
+            {
+                // Check if the clicked object is one of the books
+                if (roomThreeScript.IsBookObject(clickedObject))
+                {
+                    Debug.Log("Clicked on book: " + clickedObject.name);
+                    roomThreeScript.SelectBook(clickedObject);
+                }
+                // Check if the clicked object is the empty bookshelf
+                else if (emptyBookshelfObject != null && clickedObject == emptyBookshelfObject)
+                {
+                    Debug.Log("Clicked on empty bookshelf");
+                    roomThreeScript.HandleBookshelfClick();
                 }
             }
 

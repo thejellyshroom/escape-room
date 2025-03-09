@@ -7,11 +7,8 @@ public class RoomTwo : MonoBehaviour
 {
     [SerializeField] GameObject[] correctTorches;
     [SerializeField] GameObject doorToDestroy;
-    [SerializeField] Material highlightMaterial;
-    [SerializeField] Material originalTorchMaterial;
 
     private List<GameObject> selectedTorches = new List<GameObject>();
-    private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
     private TextManager textManager;
 
     void Start()
