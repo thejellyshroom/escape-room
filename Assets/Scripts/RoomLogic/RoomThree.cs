@@ -8,23 +8,18 @@ public class RoomThree : MonoBehaviour
     [SerializeField] GameObject greenBook;
     [SerializeField] GameObject redBook;
 
-    private bool isBook1Selected = false;
-    private bool isBook2Selected = false;
-    private bool isBook3Selected = false;
+    private bool isBrownBookPlaced = false;
+    private bool isGreenBookPlaced = false;
+    private bool isRedBookPlaced = false;
 
     [SerializeField] GameObject emptyBookshelf;
 
     [SerializeField] GameObject doorToDestroy;
 
-    // References to instantiated books
-    private GameObject instantiatedBrownBook;
-    private GameObject instantiatedGreenBook;
-    private GameObject instantiatedRedBook;
-
     // Positions on the empty bookshelf for placing books
-    private Vector3 book1PlacementPosition;
-    private Vector3 book2PlacementPosition;
-    private Vector3 book3PlacementPosition;
+    private Vector3 brownBookPlacementPosition;
+    private Vector3 greenBookPlacementPosition;
+    private Vector3 redBookPlacementPosition;
 
     private Quaternion bookPlacementRotation;
 
@@ -34,33 +29,15 @@ public class RoomThree : MonoBehaviour
     {
         textManager = GetComponent<TextManager>();
 
-        book1PlacementPosition = new Vector3(-25.99779f, 0.8761549f, -28.59965f);
-        book2PlacementPosition = new Vector3(-25.99779f, 0.8761549f, -28.452f);
-        book3PlacementPosition = new Vector3(-25.99779f, 0.8761549f, -28.307f);
+        brownBookPlacementPosition = new Vector3(2.083f, 16.525f, 6.855f);
+        greenBookPlacementPosition = new Vector3(2.083f, 16.525f, 6.994f);
+        redBookPlacementPosition = new Vector3(2.083f, 16.525f, 7.133f);
         bookPlacementRotation = Quaternion.Euler(0, 90, 0);
     }
 
     void Update()
     {
-        // Check if all books have been placed
-        if (isBook1Selected && isBook2Selected && isBook3Selected)
-        {
-            // Destroy the door to allow progression
-            if (doorToDestroy != null)
-            {
-                doorToDestroy.SetActive(false);
 
-                // Reset the flags to prevent multiple door destruction
-                isBook1Selected = false;
-                isBook2Selected = false;
-                isBook3Selected = false;
-
-                if (textManager != null)
-                {
-                    textManager.UpdateText("All books placed correctly! The door opens...");
-                }
-            }
-        }
     }
 
     // Method to check if a GameObject is one of our book objects
@@ -70,125 +47,96 @@ public class RoomThree : MonoBehaviour
     }
 
     // Method to handle when a book is clicked
-    public void SelectBook(GameObject book)
+    public GameObject SelectBook(GameObject book)
     {
-        if (book == brownBook && !isBook1Selected)
+        GameObject selectedBook = null;
+        if (book == brownBook)
         {
             book.SetActive(false);
             if (textManager != null)
             {
                 textManager.UpdateText("Brown book selected! Click on the empty bookshelf to place it.");
             }
+            selectedBook = brownBook;
         }
-        else if (book == greenBook && !isBook2Selected)
+        else if (book == greenBook)
         {
             book.SetActive(false);
             if (textManager != null)
             {
                 textManager.UpdateText("Green book selected! Click on the empty bookshelf to place it.");
             }
+            selectedBook = greenBook;
         }
-        else if (book == redBook && !isBook3Selected)
+        else if (book == redBook)
         {
             book.SetActive(false);
             if (textManager != null)
             {
                 textManager.UpdateText("Red book selected! Click on the empty bookshelf to place it.");
             }
+            selectedBook = redBook;
         }
+        return selectedBook;
     }
 
     // Method to handle when the empty bookshelf is clicked
-    public void HandleBookshelfClick()
+    public void HandleBookshelfClick(GameObject selectedBook)
     {
-        // Check which books have been selected but not placed
-        if (!brownBook.activeSelf)
+        if (selectedBook == brownBook)
         {
-            PlaceBrownBook();
+            PlaceBook(selectedBook);
         }
-        else if (!greenBook.activeSelf)
+        else if (selectedBook == greenBook)
         {
-            PlaceGreenBook();
+            PlaceBook(selectedBook);
         }
-        else if (!redBook.activeSelf)
+        else if (selectedBook == redBook)
         {
-            PlaceRedBook();
+            PlaceBook(selectedBook);
         }
 
         // Check if all books have been placed after this placement
         CheckAllBooksPlaced();
     }
 
-    // Place the brown book on the bookshelf
-    private void PlaceBrownBook()
+    // Place the book on the bookshelf
+    private void PlaceBook(GameObject book)
     {
-        Vector3 placementPosition = book1PlacementPosition;
-
-        Quaternion placementRotation = bookPlacementRotation;
-
-        instantiatedBrownBook = Instantiate(brownBook, placementPosition, placementRotation);
-        instantiatedBrownBook.SetActive(true);
-        isBook1Selected = true;
-
-        if (textManager != null)
+        if (book == brownBook)
         {
-            textManager.UpdateText("Brown book placed! (" + CountBooksPlaced() + "/3)");
+            // Set local position/rotation relative to parent
+            book.transform.localPosition = brownBookPlacementPosition;
+            book.transform.localRotation = bookPlacementRotation;
+            book.SetActive(true);
+            isBrownBookPlaced = true;
         }
-    }
-
-    // Place the green book on the bookshelf
-    private void PlaceGreenBook()
-    {
-        Vector3 placementPosition = book2PlacementPosition;
-
-        Quaternion placementRotation = bookPlacementRotation;
-
-        instantiatedGreenBook = Instantiate(greenBook, placementPosition, placementRotation);
-        instantiatedGreenBook.SetActive(true);
-        isBook2Selected = true;
-
-        if (textManager != null)
+        else if (book == greenBook)
         {
-            textManager.UpdateText("Green book placed! (" + CountBooksPlaced() + "/3)");
+            book.transform.localPosition = greenBookPlacementPosition;
+            book.transform.localRotation = bookPlacementRotation;
+            book.SetActive(true);
+            isGreenBookPlaced = true;
         }
-    }
-
-    // Place the red book on the bookshelf
-    private void PlaceRedBook()
-    {
-        Vector3 placementPosition = book3PlacementPosition;
-
-        Quaternion placementRotation = bookPlacementRotation;
-
-        instantiatedRedBook = Instantiate(redBook, placementPosition, placementRotation);
-        instantiatedRedBook.SetActive(true);
-        isBook3Selected = true;
-
-        if (textManager != null)
+        else if (book == redBook)
         {
-            textManager.UpdateText("Red book placed! (" + CountBooksPlaced() + "/3)");
+            book.transform.localPosition = redBookPlacementPosition;
+            book.transform.localRotation = bookPlacementRotation;
+            book.SetActive(true);
+            isRedBookPlaced = true;
         }
-    }
-
-    // Count the number of books placed
-    private int CountBooksPlaced()
-    {
-        int count = 0;
-        if (isBook1Selected) count++;
-        if (isBook2Selected) count++;
-        if (isBook3Selected) count++;
-        return count;
     }
 
     // Check if all books have been placed and update UI
     private void CheckAllBooksPlaced()
     {
-        if (isBook1Selected && isBook2Selected && isBook3Selected)
+        if (isBrownBookPlaced && isGreenBookPlaced && isRedBookPlaced)
         {
             if (textManager != null)
             {
                 textManager.UpdateText("All books placed! The door is opening...");
             }
+            Destroy(doorToDestroy);
         }
     }
 }

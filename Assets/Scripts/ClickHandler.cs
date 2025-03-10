@@ -9,6 +9,8 @@ public class ClickHandler : MonoBehaviour
     [SerializeField] private GameObject cauldronObject; // Reference to the cauldron
     [SerializeField] private GameObject emptyBookshelfObject; // Reference to the empty bookshelf
 
+    private GameObject selectedBook;
+
     void Start()
     {
         roomOneScript = GetComponent<RoomOne>();
@@ -61,13 +63,13 @@ public class ClickHandler : MonoBehaviour
                 if (roomThreeScript.IsBookObject(clickedObject))
                 {
                     Debug.Log("Clicked on book: " + clickedObject.name);
-                    roomThreeScript.SelectBook(clickedObject);
+                    selectedBook = roomThreeScript.SelectBook(clickedObject);
                 }
                 // Check if the clicked object is the empty bookshelf
                 else if (emptyBookshelfObject != null && clickedObject == emptyBookshelfObject)
                 {
                     Debug.Log("Clicked on empty bookshelf");
-                    roomThreeScript.HandleBookshelfClick();
+                    roomThreeScript.HandleBookshelfClick(selectedBook);
                 }
             }
 
