@@ -55,7 +55,7 @@ public class RoomThree : MonoBehaviour
             book.SetActive(false);
             if (textManager != null)
             {
-                textManager.UpdateText("Brown book selected! Click on the empty bookshelf to place it.");
+                textManager.UpdateText("Brown book selected!");
             }
             selectedBook = brownBook;
         }
@@ -64,7 +64,7 @@ public class RoomThree : MonoBehaviour
             book.SetActive(false);
             if (textManager != null)
             {
-                textManager.UpdateText("Green book selected! Click on the empty bookshelf to place it.");
+                textManager.UpdateText("Green book selected!");
             }
             selectedBook = greenBook;
         }
@@ -73,7 +73,7 @@ public class RoomThree : MonoBehaviour
             book.SetActive(false);
             if (textManager != null)
             {
-                textManager.UpdateText("Red book selected! Click on the empty bookshelf to place it.");
+                textManager.UpdateText("Red book selected!");
             }
             selectedBook = redBook;
         }
